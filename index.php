@@ -22,6 +22,26 @@ $f3 ->route('GET /',function() {
     echo $view -> render("views/home.html");
 });
 
+
+//define a breakfast route(328/diner/breakfast
+// when a user writes breakfast into the url, we route to breakfast.html
+$f3 ->route('GET /breakfast',function() {
+
+    //instantiate a view
+    $view = new Template();
+
+    echo $view -> render("views/breakfast.html");
+});
+
+//define a breakfast route(328/diner/breakfast
+// when a user writes breakfast into the url, we route to breakfast.html
+$f3 ->route('GET /lunch',function() {
+
+    //instantiate a view
+    $view = new Template();
+
+    echo $view -> render("views/lunch.html");
+});
 //Run fat free
 $f3->run();
 
