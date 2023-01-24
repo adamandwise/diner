@@ -1,9 +1,15 @@
 <?php
+
+//tinas github repo   https://github.com/tostrander/diner/
 // this is my CONTROLLER for the diner project
 
 //turn  on error eporting
 ini_set('display_errors',1);
 error_reporting(E_ALL);
+
+
+//start a session
+session_start();
 
 //Require the autoload file
 require_once('vendor/autoload.php');
@@ -41,6 +47,30 @@ $f3 ->route('GET /lunch',function() {
     $view = new Template();
 
     echo $view -> render("views/lunch.html");
+});
+
+$f3 ->route('GET|POST /order1',function($f3) {
+
+        //if form has been submitted
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_SESSION['food'] = $_POST['food'];
+        $_SESSION['meal'] = $_POST['meal'];
+
+        //redirect to summary page
+        $f3->reroute('summary');
+    }
+    //instantiate a view
+    $view = new Template();
+
+    echo $view -> render("views/order1.html");
+});
+
+$f3 ->route('GET|POST /summary',function() {
+
+    //instantiate a view
+    $view = new Template();
+
+    echo $view -> render("views/summary.html");
 });
 //Run fat free
 $f3->run();
