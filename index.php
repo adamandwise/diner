@@ -57,12 +57,28 @@ $f3 ->route('GET|POST /order1',function($f3) {
         $_SESSION['meal'] = $_POST['meal'];
 
         //redirect to summary page
-        $f3->reroute('summary');
+        $f3->reroute('order2');
     }
     //instantiate a view
     $view = new Template();
 
     echo $view -> render("views/order1.html");
+});
+
+$f3 ->route('GET|POST /order2',function($f3) {
+
+    //if form has been submitted
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_SESSION['conds[]'] = $_POST['conds[]'];
+
+
+        //redirect to summary page
+        $f3->reroute('summary');
+    }
+    //instantiate a view
+    $view = new Template();
+
+    echo $view -> render("views/order2.html");
 });
 
 $f3 ->route('GET|POST /summary',function() {
