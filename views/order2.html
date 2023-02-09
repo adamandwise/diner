@@ -14,11 +14,10 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label ">Select your favorite condiments</label>
                 <div class="col-sm-4 ">
-                    <label><input type="checkbox" name="conds[]" value="Ketchup">Ketchup</label><br>
-                    <label><input type="checkbox" name="conds[]" value="Mustard">Mustard</label><br>
-                    <label><input type="checkbox" name="conds[]" value="Sriracha">sriracha</label><br>
-                    <label><input type="checkbox" name="conds[]" value="Mayo">Mayo</label><br>
-                    <label><input type="checkbox" name="conds[]" value="Kimchi">Kimchi</label><br>
+                    <repeat group="{{@condiments}}" value="{{@condiment}}">
+                        <label><input type="checkbox" name="conds[]" value="{{@condiment}}"> {{ucfirst(@condiment)}}</label><br>
+                    </repeat>
+
                 </div>
             </div>
             <br>

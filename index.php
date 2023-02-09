@@ -13,6 +13,9 @@ session_start();
 
 //Require the autoload file
 require_once('vendor/autoload.php');
+require_once ('model/data-layer.php');
+//var_dump(getMeals());
+
 
 //Instantiate the F3 Base class ( fat-free object)
 $f3 = Base::instance();
@@ -56,12 +59,15 @@ $f3 ->route('GET|POST /order1',function($f3) {
         $_SESSION['food'] = $_POST['food'];
         $_SESSION['meal'] = $_POST['meal'];
 
-        //redirect to summary page
+        //redirect to summary page if the form has been posted
         $f3->reroute('order2');
     }
+
+    //Add the data to the F3 hive
+    $f3->set('meals',getMeals());
+
     //instantiate a view
     $view = new Template();
-
     echo $view -> render("views/order1.html");
 });
 
@@ -75,6 +81,9 @@ $f3 ->route('GET|POST /order2',function($f3) {
         //redirect to summary page
         $f3->reroute('summary');
     }
+
+    //Add the data to the F3 hive
+    $f3-> set('condiments', getCondiments());
     //instantiate a view
     $view = new Template();
 
