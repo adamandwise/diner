@@ -1,8 +1,11 @@
 <?php
 
+class Validate
+{
+
 
     //return true if the food has at least two characters
-    function validFood($food)
+    static function validFood($food)
     {
         /* two different ways to say this
 
@@ -18,26 +21,24 @@
     }
 
 
-
-
-    function validMeal($meal)
+    static function validMeal($meal)
     {
 
-        if (in_array($meal,getMeals())){
+        if (in_array($meal, DataLayer::getMeals())) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
-            echo $meal;
-            var_dump(getMeals());
-       // return in_array($meal,getMeals());
+        echo $meal;
+        var_dump(getMeals());
+        // return in_array($meal,getMeals());
     }
 
     function validConds($conds)
     {
-        return in_array($conds,getCondiments());
+        return in_array($conds, DataLayer::getCondiments());
     }
 
+}
 
 
