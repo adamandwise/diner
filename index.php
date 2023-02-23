@@ -9,12 +9,35 @@ error_reporting(E_ALL);
 
 
 //start a session
-session_start();
 
 //Require the autoload file
 require_once('vendor/autoload.php');
+//start a session after requiring autoload.php
+session_start();
 require_once ('model/data-layer.php');
+require_once ('model/validate.php');
+//var_dump($_SESSION);
+//require_once ('classes/order.php');  //run composer update in ssh session every time you update or create a new class
+
+
+/*
+$myOrder = new Order();
+$myOrder->setFood("tacos");
+echo "<p>".$myOrder->getFood()."<p>";
+$myOrder->setMeal("4th meal");
+echo "<p>".$myOrder->getMeal()."<p>";
+$myOrder->setCondiments("sour cream");
+echo "<p>".$myOrder->getCondiments()."<p>";
+var_dump($myOrder);
 //var_dump(getMeals());
+
+/*
+$food1 = "tacos";
+$food2 = "";
+$food3 = "x";
+
+echo validFood($food1) ? "valid" : "not valid";
+*/
 
 
 //Instantiate the F3 Base class ( fat-free object)
@@ -54,13 +77,43 @@ $f3 ->route('GET /lunch',function() {
 
 $f3 ->route('GET|POST /order1',function($f3) {
 
-        //if form has been submitted
+
+    //if form has been submitted
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $_SESSION['food'] = $_POST['food'];
-        $_SESSION['meal'] = $_POST['meal'];
+
+        $newOrder = new Order();
+
+        //validation logic for food variable
+        $food  = trim($_POST['food']);
+        if(validFood($food)) {
+            $newOrder->setFood($food);
+        }  else{
+            $f3->set('errors["food"]',
+                'Food must have at least 2 chars');
+        }
+
+        // validation logic for meal variable
+        $meal = trim($_POST['meal']);
+        if(validMeal($meal)) {
+            $newOrder->setMeal($meal);
+            echo "meal is valid";
+
+        }else{
+            $f3->set('errors["meal"]','Meals is invalid');
+            echo "meal is invalid";
+            echo $meal;
+
+        }
+
+
 
         //redirect to summary page if the form has been posted
-        $f3->reroute('order2');
+        // if there are no errors we can reroute
+        if(empty($f3->get('errors'))){
+            $_SESSION['newOrder'] = $newOrder;
+            $f3->reroute('order2');
+        }
+
     }
 
     //Add the data to the F3 hive
@@ -75,7 +128,20 @@ $f3 ->route('GET|POST /order2',function($f3) {
 
     //if form has been submitted
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $_SESSION['conds[]'] = $_POST['conds[]'];
+
+        //$_SESSION['conds'] = implode(",", $_POST['conds']);
+
+        //this way
+        /*
+        $newOrder = $_SESSION['newOrder'];
+        $condString =implode(",", $_POST['conds']);
+        $newOrder ->setCondiments($condString);
+        $_SESSION['newOrder']= $newOrder;
+        */
+
+        //or this way
+        $condString =implode(",", $_POST['conds']);
+        $_SESSION['newOrder']->setCondiments($condString);
 
 
         //redirect to summary page
@@ -84,6 +150,12 @@ $f3 ->route('GET|POST /order2',function($f3) {
 
     //Add the data to the F3 hive
     $f3-> set('condiments', getCondiments());
+
+
+//    if(empty($f3->get('errors'))){
+//
+//        $f3->reroute('summary');
+//    }
     //instantiate a view
     $view = new Template();
 
@@ -92,10 +164,15 @@ $f3 ->route('GET|POST /order2',function($f3) {
 
 $f3 ->route('GET|POST /summary',function() {
 
+    //write to data base
+
     //instantiate a view
     $view = new Template();
 
     echo $view -> render("views/summary.html");
+
+    //Destroy Session Array
+    session_destroy();
 });
 //Run fat free
 $f3->run();
@@ -105,4 +182,3 @@ $f3->run();
 
 
 
-?>

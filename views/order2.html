@@ -17,6 +17,10 @@
                     <repeat group="{{@condiments}}" value="{{@condiment}}">
                         <label><input type="checkbox" name="conds[]" value="{{@condiment}}"> {{ucfirst(@condiment)}}</label><br>
                     </repeat>
+                    <p></p>
+                    <check if="{{ isset(@errors['conds']) }}">
+                        <span class="err">{{ @errors['conds'] }}</span>
+                    </check>
 
                 </div>
             </div>

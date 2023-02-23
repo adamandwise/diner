@@ -4,7 +4,8 @@
     <div class="row">
 
         <h1> Thank You For Your Order!</h1>
-        <p>You ordered {{@SESSION.food }} for {{@SESSION.meal }}</p>
+        <p>You ordered {{@SESSION.newOrder->getFood() }} for {{@SESSION.newOrder->getMeal() }}</p>
+        <p>Condiments include: {{@SESSION.newOrder->getCondiments()}}</p>
 
     </div>
 
