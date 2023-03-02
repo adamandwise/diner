@@ -115,4 +115,19 @@ class Controller
         echo $view -> render("views/order2.html");
     }
 
+    function summary()
+    {
+
+        //write to data base
+
+        //instantiate a view
+        $view = new Template();
+
+        echo $view -> render("views/summary.html");
+
+        //Destroy Session Array
+        session_destroy();
+    }
+
+
 }

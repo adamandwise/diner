@@ -12,8 +12,18 @@ error_reporting(E_ALL);
 
 //Require the autoload file
 require_once('vendor/autoload.php');
+
+//Test Data Layer Class
+
+
 //start a session after requiring autoload.php
 session_start();
+
+//Test Data Layer Class
+$dataLayer = new DataLayer();
+$myOrder = new Order('gyros','dinner',"Tziki, pickles");
+$id = $dataLayer->saveOrder($myOrder);
+echo "$id inserted successfully";
 
 //var_dump($_SESSION);
 //require_once ('classes/order.php');  //run composer update in ssh session every time you update or create a new class
@@ -80,17 +90,8 @@ $f3 ->route('GET|POST /order2',function($f3) {
     $GLOBALS['con']->order2();
 });
 
-$f3 ->route('GET|POST /summary',function() {
-
-    //write to data base
-
-    //instantiate a view
-    $view = new Template();
-
-    echo $view -> render("views/summary.html");
-
-    //Destroy Session Array
-    session_destroy();
+$f3 ->route('GET|POST /summary',function($f3) {
+    $GLOBALS['con']->summary();
 });
 //Run fat free
 $f3->run();
